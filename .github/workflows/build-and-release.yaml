@@ -21,19 +21,19 @@ jobs:
       - name: Get short SHA
         id: get_short_sha
         if: ${{ !contains(github.event.head_commit.message, '[release]') }}
-        run: echo "::set-output name=short_sha::$(echo ${{ github.sha }} | cut -c1-10)"
+        run: echo "short_sha=$(echo ${{ github.sha }} | cut -c1-10)" >> $GITHUB_ENV
 
-      - name: Get current date and time
+      - name: Get current date and time in EST
         id: get_date
         if: ${{ !contains(github.event.head_commit.message, '[release]') }}
         run: |
-          utc_date=$(TZ='UTC' date +'%Y-%m-%d @ %H:%M:%S')
-          echo "::set-output name=date::$utc_date"
+          est_date=$(TZ='America/New_York' date +'%Y-%m-%d @ %H:%M:%S')
+          echo "date=$est_date" >> $GITHUB_ENV
 
       - name: Write build details to file
         if: ${{ !contains(github.event.head_commit.message, '[release]') }}
         run: |
-          printf "%s\n%s" "${{ steps.get_date.outputs.date }}" "${{ steps.get_short_sha.outputs.short_sha }}" > build_details.txt
+          printf "%s\n%s" "${{ env.date }}" "${{ env.short_sha }}" > build_details.txt
 
       - name: Package Application
         uses: JackMcKew/pyinstaller-action-windows@main
@@ -49,6 +49,8 @@ jobs:
   release:
     runs-on: [ubuntu-latest]
     needs: build
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -62,16 +64,16 @@ jobs:
 
       - name: Get short SHA
         id: get_short_sha
-        run: echo "::set-output name=short_sha::$(echo ${{ github.sha }} | cut -c1-10)"
+        run: echo "short_sha=$(echo ${{ github.sha }} | cut -c1-10)" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: cicd-${{ github.run_number }}
-          name: cicd-${{ steps.get_short_sha.outputs.short_sha }}
+          name: cicd-${{ env.short_sha }}
           body: |
-            Release triggered by commit [${{ steps.get_short_sha.outputs.short_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}): ${{ github.event.head_commit.message }}            
+            Release triggered by commit [${{ env.short_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}): ${{ github.event.head_commit.message }}            
           files: ./dist/ForceBindIP-GUI.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,7 +83,7 @@ jobs:
         with:
           ref: latest
           description: |
-            Latest release - triggered by commit [${{ steps.get_short_sha.outputs.short_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            Latest release - triggered by commit [${{ env.short_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
           force-branch: false
           git-directory: '.'
         env:
