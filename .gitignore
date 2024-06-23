@@ -1,0 +1,9 @@
+.vscode
+__pycache__/
+Scripts/
+Lib/
+Include/
+dist/
+build_details.txt
+pyvenv.cfg
+build/

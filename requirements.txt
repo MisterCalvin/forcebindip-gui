@@ -1,0 +1,4 @@
+pyinstaller
+psutil
+tkinterdnd2
+pywin32
