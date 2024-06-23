@@ -23,12 +23,12 @@ jobs:
         if: ${{ !contains(github.event.head_commit.message, '[release]') }}
         run: echo "short_sha=$(echo ${{ github.sha }} | cut -c1-10)" >> $GITHUB_ENV
 
-      - name: Get current date and time in EST
+      - name: Get current date and time in UTC
         id: get_date
         if: ${{ !contains(github.event.head_commit.message, '[release]') }}
         run: |
-          est_date=$(TZ='America/New_York' date +'%Y-%m-%d @ %H:%M:%S')
-          echo "date=$est_date" >> $GITHUB_ENV
+          utc_date=$(TZ='UTC' date +'%Y-%m-%d @ %H:%M:%S')
+          echo "date=$utc_date" >> $GITHUB_ENV
 
       - name: Write build details to file
         if: ${{ !contains(github.event.head_commit.message, '[release]') }}

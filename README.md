@@ -15,15 +15,14 @@ A simple Python GUI for running ForceBindIP
 ## What is ForceBindIP?
 From [https://r1ch.net/projects/forcebindip](https://r1ch.net/projects/forcebindip):
 
-```
-ForceBindIP is a freeware Windows application that will inject itself into another application and alter how certain Windows socket calls are made, allowing you to force the other application to use a specific network interface / IP address. This is useful if you are in an environment with multiple interfaces and your application has no option to bind to a specific interface.
+>ForceBindIP is a freeware Windows application that will inject itself into another application and alter how certain Windows socket calls are made, allowing you to force the other application to use a specific network interface / IP address. This is useful if you are in an environment with multiple interfaces and your application has no option to bind to a specific interface.
+>
+>ForceBindIP works in two stages - the loader, ForceBindIP.exe will load the target application in a suspended state. It will then inject a DLL (BindIP.dll) which loads WS2_32.DLL into memory and intercepts the bind(), connect(), sendto(), WSAConnect() and WSASendTo() functions, redirecting them to code in the DLL which verifies which interface they will be bound to and if not the one specified, (re)binds the socket. Once the function intercepts are complete, the target application is resumed. Note that some applications with anti-debugger / injection techniques may not work correctly when an injected DLL is present; for the vast majority of applications though this technique should work fine.
+>
+>As of version 1.2, all known functions in WS2_32.DLL that either explicitly or implicitly bind to an interface are intercepted. Please note however that certain programs may still end up using the default interface if they implement connections that do not use the standard winsock functions. ForceBindIP will not prevent information leaks that may occur when using applications over a VPN. For example, all host name lookups (DNS requests) will be resolved through the default gateway as these requests originate from the Microsoft DNS Client, not the program.
 
-ForceBindIP works in two stages - the loader, ForceBindIP.exe will load the target application in a suspended state. It will then inject a DLL (BindIP.dll) which loads WS2_32.DLL into memory and intercepts the bind(), connect(), sendto(), WSAConnect() and WSASendTo() functions, redirecting them to code in the DLL which verifies which interface they will be bound to and if not the one specified, (re)binds the socket. Once the function intercepts are complete, the target application is resumed. Note that some applications with anti-debugger / injection techniques may not work correctly when an injected DLL is present; for the vast majority of applications though this technique should work fine.
 
-As of version 1.2, all known functions in WS2_32.DLL that either explicitly or implicitly bind to an interface are intercepted. Please note however that certain programs may still end up using the default interface if they implement connections that do not use the standard winsock functions. ForceBindIP will not prevent information leaks that may occur when using applications over a VPN. For example, all host name lookups (DNS requests) will be resolved through the default gateway as these requests originate from the Microsoft DNS Client, not the program.
-```
-
-## Building
+## Building (Windows only)
 
 ```
 git clone https://github.com/mistercalvin/forcebindip-gui.git
