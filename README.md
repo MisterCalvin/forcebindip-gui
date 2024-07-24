@@ -8,7 +8,7 @@ A simple Python GUI for running ForceBindIP
 - ForceBindIP exe and dll files packaged with application, will be extracted to `%USERPRROFILE%\AppData\Local\_MEIxxxx` during runtime and cleaned up afterwards
 - Drag and Drop shortcuts or exe files onto application to populate fields (will also parse any launch arguments)
 - Mouse-over tooltips will display program name, filepath, or interface name (useful for values cut off in our GUI)
-- Persistent configuration saves last 10 Recent Programs with launch arguments, specified interface, and architecture (saved to `%USERPROFILE\forcebindgui_config.json`)
+- Persistent configuration saves last 10 Recent Programs with launch arguments, specified interface, and architecture (saved to `%USERPROFILE%\forcebindgui_config.json`)
 - Switch between x86 or x64 architectures
 - Correctly binds to VPN interfaces
 
