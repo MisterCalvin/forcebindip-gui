@@ -81,7 +81,7 @@ jobs:
           timestamp-digest: SHA256 
             
           # Sign all exes inside the folder
-          files-folder: ./dist 
+          files-folder: ${{ github.workspace }}\dist 
           files-folder-filter: exe
 
       - name: Create Release
