@@ -57,10 +57,6 @@ jobs:
           name: ForceBindIPGUI
           path: ./dist
 
-      - name: Get short SHA
-        id: get_short_sha
-        run: echo "short_sha=$(echo ${{ github.sha }} | cut -c1-10)" >> $GITHUB_ENV
-
       # https://melatonin.dev/blog/code-signing-on-windows-with-azure-trusted-signing/#step-9-trusted-signing-in-ci-github
       - name: Azure Trusted Signing
         uses: azure/trusted-signing-action@v0.5.0
@@ -95,6 +91,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Get short SHA
+        id: get_short_sha
+        run: echo "short_sha=$(echo ${{ github.sha }} | cut -c1-10)" >> $GITHUB_ENV
+
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
@@ -110,16 +110,7 @@ jobs:
           body: |
             Release triggered by commit [${{ env.short_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}): ${{ github.event.head_commit.message }}            
           files: ./dist/ForceBindIP-GUI.exe
+          make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run latest-tag
-        uses: EndBug/latest-tag@latest
-        with:
-          ref: latest
-          description: |
-            Latest release - triggered by commit [${{ env.short_sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-          force-branch: false
-          git-directory: '.'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
