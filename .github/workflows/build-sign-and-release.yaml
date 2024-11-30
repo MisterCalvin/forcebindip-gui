@@ -54,7 +54,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: ForceBindIPGUI
+          name: ForceBindIPGUI_unsigned
           path: ./dist
 
       # https://melatonin.dev/blog/code-signing-on-windows-with-azure-trusted-signing/#step-9-trusted-signing-in-ci-github
@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ForceBindIPGUI
-          path: ./dist/ForceBindIP-GUI.exe
+          path: ./dist/ForceBindIP-GUI_unsigned.exe
 
   release:
     runs-on: [ubuntu-latest]
