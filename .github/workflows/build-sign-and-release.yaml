@@ -43,8 +43,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ForceBindIPGUI
-          path: dist/windows/ForceBindIP-GUI_unsigned.exe
+          name: ForceBindIPGUI_unsigned
+          path: dist/windows/ForceBindIP-GUI.exe
 
   sign:
     runs-on: [windows-latest]
