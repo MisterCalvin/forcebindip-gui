@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ForceBindIPGUI
-          path: ./dist/ForceBindIP-GUI_unsigned.exe
+          path: ./dist/ForceBindIP-GUI.exe
 
   release:
     runs-on: [ubuntu-latest]
